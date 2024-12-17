@@ -1,0 +1,19 @@
+name: entrylogger
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:8.0.4-ubi9
+    restart: always
+    environment:
+      TZ: Asia/Seoul
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 27017:27017
+    networks:
+      - el_net
+    volumes:
+      - el_vol:/data/db
+volumes:
+  el_vol:
+networks:
+  el_net:
