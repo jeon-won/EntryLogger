@@ -1,34 +1,38 @@
-// import { connectDB } from "@/_util/database";
+import { connectDB } from "@/_util/database";
 
-// const dbName = process.env.MONGODB_DB_NAME;
-// const collectionName = process.env.MONGODB_COLLECTION_NAME;
+const dbName = process.env.MONGODB_DB_NAME;
+const collectionName = process.env.MONGODB_COLLECTION_NAME;
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      /* 폼 입력 값 가져오기 */
-      let formdata = req.body;
-      console.log(`POST formdata: ${JSON.stringify(formdata, null, 2)}`);
+      /* 폼 입력 값 가져온 후 DB에 저장할 데이터로 가공 */
+      const formData = req.body;
+      const insertData = {
+        purpose: formData.purpose,
+        name: formData.name,
+        dob: new Date(formData.dob),
+        affiliation: formData.affiliation,
+        contact: formData.contact,
+        entryDate: new Date(formData.entryDateGmt9),
+        entryDateGmt9: formData.entryDateGmt9,
+      }
 
-      /* YYYY-MM-DD (HH:MM:SS) 문자열을 Date 타입으로 변환 */
-      // let { entrydate, dob } = formdata;
-      // formdata.entrydate = new Date(entrydate + "Z"); // Z를 붙였더니 GMT+9 시간대로 변경되네...
-      // formdata.dob = new Date(dob + "Z");
-
-      /* DB에 저장 */
-      // const db = (await connectDB).db(dbName);
-      // await db.collection(collectionName).insertOne(formdata);
-
-      /* 최상위 URL로 이동되도록 응답 */
+      /* DB에 저장 후 최상위 URL로 이동되도록 응답 */
+      const db = (await connectDB).db(dbName);
+      await db.collection(collectionName).insertOne(insertData);
       res.redirect(302, '/');
-    } catch (error) {
+    } 
+    
+    /* 오류 발생 시 500 상태 코드 반환 */
+    catch (error) {
       console.error("Error saving data to the database:", error);
-
-      /* 오류 발생 시 500 상태 코드 반환 */
       res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
-  } else {
-    /* 지원하지 않는 요청 메서드에 대한 응답 */
+  } 
+  
+  /* POST 요청 외엔 지원 안 함 */
+  else {
     res.status(405).json({ message: "Method Not Allowed" });
   }
 }

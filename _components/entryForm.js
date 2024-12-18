@@ -12,7 +12,7 @@ const EntryForm = () => {
     dob: '',          // 생년월일
     affiliation: '',  // 소속
     contact: '',      // 연락처
-    // entryDate: '', // 입실일은 즉시 반영 이슈 때문에 별도 객체로 만들어 쓸 예정
+    // entryDateGmt9: '', // 입실일은 State 즉시 반영 이슈 때문에 별도 객체로 만들어 쓸 예정
   });
   const [isValidated, setIsValidated] = useState(false); // 폼 입력정보 유효성 검증용 State
   const [isChecked, setIsChecked] = useState(false);     // 정보제공 동의 체크용 State
@@ -25,7 +25,7 @@ const EntryForm = () => {
     }
   }, []);
 
-  /* 날짜 유효성 검증 */
+  /* 날짜 유효성 검증 함수 */
   const isValidDate = (dateString) => {
     const date = new Date(dateString);
     return date instanceof Date && !isNaN(date);
@@ -73,19 +73,19 @@ const EntryForm = () => {
       return;
     }
 
-    // 입력값이 유효하면 POST 요청 보내고
+    // 입력값이 유효하면 폼 입력정보와 입실일을 POST 요청에 담아 보내고
     e.preventDefault()
     await fetch("/api/insert", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({...formData, entryDate: new Date(Date.now() + 9 * 60 * 60 * 1000)
+      body: JSON.stringify({...formData, entryDateGmt9: new Date(Date.now() + 9 * 60 * 60 * 1000)
         .toISOString()
         .replace('T', ' ')
         .slice(0, 19)
       })
     });
 
-    // State 초기화 및
+    // State 초기화 한 후
     setIsValidated(false);
     setIsChecked(false);
     setFormData({
@@ -96,7 +96,7 @@ const EntryForm = () => {
       contact: '',
     });
 
-    // 첫번째 입력 폼에 포커스
+    // 첫번째 입력 폼에 포커스 맞춤
     focusRef.current.focus();
   }
 
