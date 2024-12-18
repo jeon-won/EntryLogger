@@ -9,13 +9,14 @@ export default async function handler(req, res) {
       /* 폼 입력 값 가져온 후 DB에 저장할 데이터로 가공 */
       const formData = req.body;
       const insertData = {
-        purpose: formData.purpose,
-        name: formData.name,
-        dob: new Date(formData.dob),
-        affiliation: formData.affiliation,
-        contact: formData.contact,
-        entryDate: new Date(formData.entryDateGmt9),
-        entryDateGmt9: formData.entryDateGmt9,
+        purpose: formData.purpose,         // 방문목적(String 타입)
+        name: formData.name,               // 성명(String 타입)
+        dob: new Date(formData.dob),       // 생년월일(Date 타입)
+        affiliation: formData.affiliation, // 소속(String 타입)
+        contact: formData.contact,         // 연락처(String 타입)
+        lastContact: formData.contact.match(/\d{4}$/)[0], // 연락처 뒤 4자리(String 타입)
+        entryDate: new Date(formData.entryDateGmt9),      // 입실일(Date 타입)
+        entryDateGmt9: formData.entryDateGmt9,            // 입실일 GMT+9(String 타입)
       }
 
       /* DB에 저장 후 최상위 URL로 이동되도록 응답 */

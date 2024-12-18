@@ -101,7 +101,7 @@ const EntryForm = () => {
   }
 
   return (
-    <Container className="mt-2">
+    <Container className="mt-3">
       <Form noValidate validated={isValidated} onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} md="4" controlId="formPurpose">
@@ -175,7 +175,7 @@ const EntryForm = () => {
           <Form.Group as={Col} md="8" controlId="formCheckbox" className="mb-3">
             <Form.Check
               type="checkbox"
-              label="사전에 전산실 출입 신청서 및 보안서약서를 제출하였으며, 위의 정보를 제공하는 것에 동의합니다."
+              label="위 본인은 사전에 전산실 출입 신청서 및 보안서약서를 제출하였으며, 위의 정보를 제공하는 것에 동의합니다."
               checked={isChecked}
               onChange={handleCheck}
               required

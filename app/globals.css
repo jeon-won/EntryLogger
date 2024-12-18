@@ -5,3 +5,8 @@
 .form-label {
   font-weight: bold;
 }
+
+.centered {
+  text-align: center;
+  vertical-align: middle;
+}
