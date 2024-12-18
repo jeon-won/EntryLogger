@@ -4,17 +4,18 @@ import Button from 'react-bootstrap/Button';
 
 const EntryListTable = (props) => {
   const { data } = props;
-  console.log(`props: ${JSON.stringify(data, null, 2)}`)
 
-  const handleClick = (e) => {
-    alert(e.target);
+  const handleClick = (e, id) => {
+    alert(id);
+    // TODO: 대충 id 값을 사용하여 퇴실시간 추가하는 코드 작성.
+    // 클라이언트 컴포넌트라 fetch Ajax(Fetch) 사용해야 할 듯.
   }
 
   return (
     <>
       {
         data ? (
-          <Table striped="columns" bordered hover>
+          <Table striped bordered hover>
             <thead>
               <tr className="centered">
                 <th>성명</th>
@@ -36,8 +37,8 @@ const EntryListTable = (props) => {
                     <td>{item.entryDateGmt9}</td>
                     <td>{
                       item.exitDateGmt9 
-                        ? "있다고 가정" 
-                        : <Button variant="success" onClick={handleClick}>퇴실처리</Button>
+                        ? item.exitDateGmt9
+                        : <Button variant="success" onClick={(e) => handleClick(e, item._id)}>퇴실처리</Button>
                       }
                     </td>
                   </tr>
@@ -56,3 +57,4 @@ const EntryListTable = (props) => {
 }
 
 export default EntryListTable;
+
