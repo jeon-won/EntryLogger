@@ -7,17 +7,14 @@ import InfoModal from './infoModal';
 const EntryForm = () => {
   /* State 및 Ref */
   const [formData, setFormData] = useState({
-    purpose: '',     // 방문목적
-    name: '',        // 성명
-    dob: '',         // 생년월일
-    affiliation: '', // 소속
-    contact: '',     // 연락처
-    entrydate: new Date(Date.now() + 9 * 60 * 60 * 1000)
-      .toISOString()
-      .replace('T', ' ')
-      .slice(0, 19), // 방문일시(YYYY-MM-DD HH:mm:ss 형식)
+    purpose: '',      // 방문목적
+    name: '',         // 성명
+    dob: '',          // 생년월일
+    affiliation: '',  // 소속
+    contact: '',      // 연락처
+    // entryDate: '', // 입실일은 즉시 반영 이슈 때문에 별도 객체로 만들어 쓸 예정
   });
-  const [isValidated, setIsValidated] = useState(false); // 정보 유효성 검증용 State
+  const [isValidated, setIsValidated] = useState(false); // 폼 입력정보 유효성 검증용 State
   const [isChecked, setIsChecked] = useState(false);     // 정보제공 동의 체크용 State
   const focusRef = useRef(null);                         // 폼 입력 포커스용 Ref
 
@@ -62,17 +59,12 @@ const EntryForm = () => {
 
   /* 정보 제공 동의여부 체크 이벤트 처리 함수 */
   const handleCheck = (e) => {
-    setIsChecked(e.target.checked)
+    setIsChecked(e.target.checked);
   }
 
   /* 등록 버튼 이벤트 처리 함수 */
   const handleSubmit = async (e) => {
-    setFormData((prev) => ({ ...prev, entrydate: new Date(Date.now() + 9 * 60 * 60 * 1000)
-      .toISOString()
-      .replace('T', ' ')
-      .slice(0, 19) })); // YYYY-MM-DD HH:mm:ss 형식
-    
-    // 입력 값이 유효하지 않으면 알림
+    // 입력 값이 유효하지 않으면 경고
     const form = e.currentTarget;
     if (form.checkValidity() === false || !isChecked || !isValidDate(formData.dob)) {
       e.preventDefault();
@@ -81,26 +73,30 @@ const EntryForm = () => {
       return;
     }
 
-    // 입력값이 유효하면 POST 요청 보내고 State 초기화 및 첫번째 입력 폼에 포커스
+    // 입력값이 유효하면 POST 요청 보내고
     e.preventDefault()
     await fetch("/api/insert", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
+      body: JSON.stringify({...formData, entryDate: new Date(Date.now() + 9 * 60 * 60 * 1000)
+        .toISOString()
+        .replace('T', ' ')
+        .slice(0, 19)
+      })
     });
+
+    // State 초기화 및
+    setIsValidated(false);
+    setIsChecked(false);
     setFormData({
       purpose: '',
       name: '',
       dob: '',
       affiliation: '',
       contact: '',
-      entrydate: new Date(Date.now() + 9 * 60 * 60 * 1000)
-        .toISOString()
-        .replace('T', ' ')
-        .slice(0, 19),
     });
-    setIsValidated(false);
-    setIsChecked(false);
+
+    // 첫번째 입력 폼에 포커스
     focusRef.current.focus();
   }
 
