@@ -3,9 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect, useRef } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import InfoModal from './infoModal';
+import insertDocument from '@/_util/insertDocument';
+import { useRouter } from "next/navigation"
 
 const EntryForm = () => {
-  /* State 및 Ref */
+  /* State, Ref 및 변수 */
   const [formData, setFormData] = useState({
     purpose: '',      // 방문목적
     name: '',         // 성명
@@ -16,7 +18,8 @@ const EntryForm = () => {
   });
   const [isValidated, setIsValidated] = useState(false); // 폼 입력정보 유효성 검증용 State
   const [isChecked, setIsChecked] = useState(false);     // 정보제공 동의 체크용 State
-  const focusRef = useRef(null);                         // 폼 입력 포커스용 Ref
+  const focusRef = useRef(null); // 폼 입력 포커스용 Ref
+  const router = useRouter();    // Soft refresh용(바뀐 부분만 새로고침)
 
   /* 컴포넌트 렌더링 후 첫번째 입력 폼에 포커스 맞춤 */
   useEffect(() => {
@@ -73,17 +76,12 @@ const EntryForm = () => {
       return;
     }
 
-    // 입력값이 유효하면 폼 입력정보와 입실일을 POST 요청에 담아 보내고
+    // 입력값이 유효하면 폼 입력정보와 입실일을 DB에 저장하고
     e.preventDefault()
-    await fetch("/api/insert", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({...formData, entryDateGmt9: new Date(Date.now() + 9 * 60 * 60 * 1000)
-        .toISOString()
-        .replace('T', ' ')
-        .slice(0, 19)
-      })
-    });
+    insertDocument({ ...formData, entryDateGmt9: new Date(Date.now() + 9 * 60 * 60 * 1000)
+          .toISOString()
+          .replace('T', ' ')
+          .slice(0, 19)});
 
     // State 초기화 한 후
     setIsValidated(false);
@@ -96,13 +94,14 @@ const EntryForm = () => {
       contact: '',
     });
 
-    // 첫번째 입력 폼에 포커스 맞춤
+    // 입력 데이터 표출되게 새로고침 후 첫번째 입력 폼에 포커스 맞춤
+    router.refresh(); 
     focusRef.current.focus();
   }
 
   return (
     <Container className="mt-3">
-      <Form noValidate validated={isValidated} onSubmit={handleSubmit}>
+      <Form noValidate validated={isValidated} action={insertDocument} onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} md="4" controlId="formPurpose">
             <Form.Label className="form-label">1. 방문목적</Form.Label>
@@ -175,7 +174,7 @@ const EntryForm = () => {
           <Form.Group as={Col} md="8" controlId="formCheckbox" className="mb-3">
             <Form.Check
               type="checkbox"
-              label="위 본인은 사전에 전산실 출입 신청서 및 보안서약서를 제출하였으며, 위의 정보를 제공하는 것에 동의합니다."
+              label="위 본인은 개인정보 수집 및 이용에 대한 안내에 따라 위의 정보를 제공하는 것에 동의합니다."
               checked={isChecked}
               onChange={handleCheck}
               required

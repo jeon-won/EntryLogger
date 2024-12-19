@@ -1,9 +1,10 @@
-'use client'
+'use client';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 
 const EntryListTable = (props) => {
   const { data } = props;
+  console.log(`data: ${data.toString()}`);
 
   const handleClick = (e, id) => {
     alert(id);
@@ -47,8 +48,8 @@ const EntryListTable = (props) => {
             </tbody>
           </Table>
         ) : (
-          <div>
-            "오늘은 출입자가 없습니다..."
+          <div className="centered">
+            <p>오늘은 출입자가 없습니다...</p>
           </div>
         )
       }
