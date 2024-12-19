@@ -2,9 +2,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect, useRef } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { useRouter } from "next/navigation"
 import InfoModal from './infoModal';
 import insertDocument from '@/_util/insertDocument';
-import { useRouter } from "next/navigation"
 
 const EntryForm = () => {
   /* State, Ref 및 변수 */

@@ -31,8 +31,8 @@ MONGODB_COLLECTION_NAME=
   * `page.js`: 메인 페이지
     + `@/_components/entryForm.js`: 출입이력을 입력 받는 컴포넌트
       - `@/_components/infoModal.js`: 개인정보 수집 및 이용에 대한 안내 모달 컴포넌트
-    + `@/_components/entryList.js`: 출입이력을 DB에서 가져오는 컴포넌트
-      - `@/_components/entryListTable.js`: 출입이력 테이블 컴포넌트
+    + `@/_components/entryTodayList.js`: 출입이력을 DB에서 가져오는 컴포넌트
+      - `@/_components/entryTodayListTable.js`: 출입이력 테이블 컴포넌트
 
 ### @/pages/api
 

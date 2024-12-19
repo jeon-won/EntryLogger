@@ -1,5 +1,3 @@
-// React Bootstrap Modal 사용법 참고: https://react-bootstrap.netlify.app/docs/components/modal
-
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
