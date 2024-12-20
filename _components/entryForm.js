@@ -174,14 +174,18 @@ const EntryForm = () => {
           <Form.Group as={Col} md="8" controlId="formCheckbox" className="mb-3">
             <Form.Check
               type="checkbox"
-              label="위 본인은 개인정보 수집 및 이용에 대한 안내에 따라 위의 정보를 제공하는 것에 동의합니다."
+              label={
+                <span>
+                  위 본인은 사전에 전산실 출입신청서 및 보안서약서를 제출하였으며, 개인정보 수집 및 이용에 대한 안내에 따라 위의 정보를 제공하는 것에 동의합니다. <span style={{ color: '#0073CF' }}>(전산실 최초 출입 시 보안서약서를 작성해주세요.)</span>
+                </span>
+              }
               checked={isChecked}
               onChange={handleCheck}
               required
             />
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="" className="mb-3">
-            <div style={{ textAlign: 'center' }}>
+            <div className="centered">
               <InfoModal/>
             </div>
           </Form.Group>
