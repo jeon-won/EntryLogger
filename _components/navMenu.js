@@ -9,7 +9,7 @@ function NavMenu() {
         <Container>
           <Navbar.Brand className="navbar-title" href="/">Entry Logger</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="/list">List</Nav.Link>
+            <Nav.Link href="/list">출입이력조회</Nav.Link>
           </Nav>
         </Container>
       </Navbar>

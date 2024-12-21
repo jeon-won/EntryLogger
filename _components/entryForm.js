@@ -101,7 +101,7 @@ const EntryForm = () => {
 
   return (
     <Container className="mt-3">
-      <Form noValidate validated={isValidated} action={insertDocument} onSubmit={handleSubmit}>
+      <Form noValidate validated={isValidated} onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} md="4" controlId="formPurpose">
             <Form.Label className="form-label">1. 방문목적</Form.Label>
