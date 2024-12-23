@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const SearchBar = () => {
+const SearchBar = ({ handleQueryChange }) => {
   const [period, setPeriod] = useState('month1');
-  const [searchFilter, setSearchFilter] = useState({
+  const [query, setQuery] = useState({
     startDate: new Date(new Date(Date.now()).setMonth(new Date().getMonth() - 1))
       .toISOString().replace('T', ' ').slice(0, 10), // YYYY-MM-DD 형태로 변환
     endDate: new Date(Date.now() + 9 * 60 * 60 * 1000)
@@ -18,12 +18,12 @@ const SearchBar = () => {
 
   /* 시작날짜 변경 이벤트 처리 함수 */
   const handleStartDateChange = (e) => {
-    setSearchFilter((prev) => ({ ...prev, startDate: e.target.value }));
+    setQuery((prev) => ({ ...prev, startDate: e.target.value }));
   }
 
   /* 종료날짜 변경 이벤트 처리 함수 */
   const handleEndDateChange = (e) => {
-    setSearchFilter((prev) => ({ ...prev, endDate: e.target.value }));
+    setQuery((prev) => ({ ...prev, endDate: e.target.value }));
   }
 
   /* 날짜범위(최근 1개월 ~ 1년) 선택 이벤트 처리 함수 */
@@ -53,16 +53,17 @@ const SearchBar = () => {
         break;
     }
     setPeriod(selectedValue);
-    setSearchFilter((prev) => ({ ...prev, startDate: startDate, endDate: endDate }));
+    setQuery((prev) => ({ ...prev, startDate: startDate, endDate: endDate }));
   }
 
   /* 검색 버튼 클릭 이벤트 처리 함수 */
   const handleSubmit = (e) => {
     e.preventDefault();
-    isDateValidated(searchFilter.startDate, searchFilter.endDate) 
+    isDateValidated(query.startDate, query.endDate) 
       ? null
       : alert('시작일이 종료일보다 늦습니다. 날짜를 다시 선택해주세요.')
-    alert(JSON.stringify(searchFilter, null, 2));
+    alert(JSON.stringify(query, null, 2));
+    handleQueryChange(query);
   }
 
   return (
@@ -74,14 +75,14 @@ const SearchBar = () => {
         style={{ width: 'auto' }} 
         type="date"
         max="9999-12-31"
-        value={searchFilter.startDate}
+        value={query.startDate}
         onChange={handleStartDateChange}
       />
       <Form.Control
         style={{ width: 'auto' }} 
         type="date"
         max="9999-12-31"
-        value={searchFilter.endDate}
+        value={query.endDate}
         onChange={handleEndDateChange}
       />
       <Form.Select 
