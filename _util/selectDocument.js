@@ -10,16 +10,17 @@ const selectDocument = async (query) => {
     const db = (await connectDB).db(dbName);
     const result = await db.collection(collectionName).find({
       entryDate: { 
-        $gte: new Date(query.entryDate),
-        $lte: new Date(query.exitDate),
+        $gte: new Date(query.startDate + " 00:00:00"),
+        $lte: new Date(query.endDate + " 23:59:59"),
       }
     }).toArray();
 
+    /* _id 값은 String 형태로 파싱해야만 컴포넌트에 전달 가능 */
     const parsedResult = result.map((item) => ({
       ...item,
       _id: item._id.toString(),
     }));
-
+    
     return parsedResult;
   } catch(error) {
     console.error("Error selecting MongoDB document:", error);

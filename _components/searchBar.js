@@ -3,73 +3,75 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
 const SearchBar = ({ handleQueryChange }) => {
+  /* State */
   const [period, setPeriod] = useState('month1');
   const [query, setQuery] = useState({
     startDate: new Date(new Date(Date.now()).setMonth(new Date().getMonth() - 1))
-      .toISOString().replace('T', ' ').slice(0, 10), // YYYY-MM-DD 형태로 변환
+      .toISOString().slice(0, 10),
     endDate: new Date(Date.now() + 9 * 60 * 60 * 1000)
-      .toISOString().replace('T', ' ').slice(0, 10),
+      .toISOString().slice(0, 10),
   });
 
-  /* 시작-종료 날짜가 유효한지 검증하는 함수 */
+  /* 날짜 유효 범위 검증용 함수 */
   const isDateValidated = (startDate, endDate) => {
     return new Date(startDate) <= new Date(endDate);
-  }
+  };
 
-  /* 시작날짜 변경 이벤트 처리 함수 */
+  /* 시작일 변경 이벤트 처리 함수 */
   const handleStartDateChange = (e) => {
-    setQuery((prev) => ({ ...prev, startDate: e.target.value }));
-  }
+    const newStartDate = e.target.value
+    setQuery((prev) => ({ ...prev, startDate: newStartDate }));
+  };
 
-  /* 종료날짜 변경 이벤트 처리 함수 */
+  /* 종료일 변경 이벤트 처리 함수 */
   const handleEndDateChange = (e) => {
-    setQuery((prev) => ({ ...prev, endDate: e.target.value }));
-  }
+    const newEndDate = e.target.value
+    setQuery((prev) => ({ ...prev, endDate: newEndDate }));
+  };
 
-  /* 날짜범위(최근 1개월 ~ 1년) 선택 이벤트 처리 함수 */
+  /* 기간 선택 변경 이벤트 처리 함수 */
   const handleSelectChange = (e) => {
-    let selectedValue = e.target.value;
+    const selectedValue = e.target.value;
     let startDate;
-    let endDate = new Date(Date.now() + 9 * 60 * 60 * 1000)
-      .toISOString().replace('T', ' ').slice(0, 10);
-    switch(selectedValue){
+    const endDate = new Date(Date.now() + 9 * 60 * 60 * 1000)
+      .toISOString().slice(0, 10);
+    switch (selectedValue) {
       case 'month1':
         startDate = new Date(new Date(Date.now()).setMonth(new Date().getMonth() - 1))
-          .toISOString().replace('T', ' ').slice(0, 10);
+          .toISOString().slice(0, 10);
         break;
       case 'month3':
         startDate = new Date(new Date(Date.now()).setMonth(new Date().getMonth() - 3))
-          .toISOString().replace('T', ' ').slice(0, 10);
+          .toISOString().slice(0, 10);
         break;
       case 'month6':
         startDate = new Date(new Date(Date.now()).setMonth(new Date().getMonth() - 6))
-          .toISOString().replace('T', ' ').slice(0, 10);
+          .toISOString().slice(0, 10);
         break;
       case 'month12':
         startDate = new Date(new Date(Date.now()).setFullYear(new Date().getFullYear() - 1))
-          .toISOString().replace('T', ' ').slice(0, 10);
+          .toISOString().slice(0, 10);
         break;
       default:
         break;
     }
     setPeriod(selectedValue);
-    setQuery((prev) => ({ ...prev, startDate: startDate, endDate: endDate }));
-  }
+    setQuery({ startDate, endDate });
+  };
 
   /* 검색 버튼 클릭 이벤트 처리 함수 */
   const handleSubmit = (e) => {
     e.preventDefault();
-    isDateValidated(query.startDate, query.endDate) 
-      ? null
-      : alert('시작일이 종료일보다 늦습니다. 날짜를 다시 선택해주세요.')
-    alert(JSON.stringify(query, null, 2));
+    if (!isDateValidated(query.startDate, query.endDate)) {
+      alert('시작일이 종료일보다 늦습니다. 날짜를 다시 선택해주세요.');
+      return;
+    }
     handleQueryChange(query);
-  }
+  };
 
   return (
     <Form 
-      style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', flexWrap: 'wrap'}} 
-      // noValidate validated={isValidated} 
+      style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', flexWrap: 'wrap' }} 
       onSubmit={handleSubmit}>
       <Form.Control
         style={{ width: 'auto' }} 
@@ -98,6 +100,6 @@ const SearchBar = ({ handleQueryChange }) => {
       <Button variant="primary" type="submit">검색</Button>
     </Form>
   );
-}
+};
 
 export default SearchBar;
