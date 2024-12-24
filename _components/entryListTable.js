@@ -13,7 +13,7 @@ const EntryListTable = ({ result }) => {
 
   return (
     <>{
-      data.length > 0 ? (
+      data ? (
         <Table striped bordered hover>
           <thead>
             <tr className="centered">

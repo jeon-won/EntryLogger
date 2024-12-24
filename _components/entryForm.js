@@ -72,7 +72,7 @@ const EntryForm = () => {
     if (form.checkValidity() === false || !isChecked || !isValidDate(formData.dob)) {
       e.preventDefault();
       e.stopPropagation();
-      alert('정확하게 입력했는지 확인좀요...');
+      alert('정확하게 입력했는지 확인좀요... 🤔');
       return;
     }
 
