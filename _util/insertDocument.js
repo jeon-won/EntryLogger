@@ -18,7 +18,7 @@ const insertDocument = async (data) => {
       entryDateGmt9: data.entryDateGmt9,            // 입실일 GMT+9(String 타입)
     }
 
-    /* DB에 저장 후 최상위 URL로 이동되도록 응답 */
+    /* DB에 저장 */
     const db = (await connectDB).db(dbName);
     await db.collection(collectionName).insertOne(insertData);
   } catch(error) {

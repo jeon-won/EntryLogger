@@ -31,10 +31,13 @@ const SearchBar = ({ handleQueryChange }) => {
 
   /* 기간 선택 변경 이벤트 처리 함수 */
   const handleSelectChange = (e) => {
+    // 변수: 기간선택값, 시작일, 종료일
     const selectedValue = e.target.value;
     let startDate;
-    const endDate = new Date(Date.now() + 9 * 60 * 60 * 1000)
-      .toISOString().slice(0, 10);
+    let endDate = new Date(Date.now() + 9 * 60 * 60 * 1000)
+      .toISOString().slice(0, 10); // 종료일은 항상 오늘이고, YYYY-MM-DD 형식으로 변환
+    
+    // 기간선택값에 따라 시작일 설정
     switch (selectedValue) {
       case 'month1':
         startDate = new Date(new Date(Date.now()).setMonth(new Date().getMonth() - 1))
@@ -55,6 +58,8 @@ const SearchBar = ({ handleQueryChange }) => {
       default:
         break;
     }
+
+    // State 업데이트
     setPeriod(selectedValue);
     setQuery({ startDate, endDate });
   };
@@ -63,7 +68,7 @@ const SearchBar = ({ handleQueryChange }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isDateValidated(query.startDate, query.endDate)) {
-      alert('시작일이 종료일보다 늦습니다. 날짜를 다시 선택해주세요.');
+      alert('시작일이 종료일보다 늦으면 안 돼요... 😅');
       return;
     }
     handleQueryChange(query);
@@ -89,15 +94,15 @@ const SearchBar = ({ handleQueryChange }) => {
       />
       <Form.Select 
         style={{ width: 'auto' }} 
-        aria-label="Default select example"
+        aria-label="검색할 기간 선택"
         value={period}
         onChange={handleSelectChange}>
-        <option value="month1">최근 1개월</option>
-        <option value="month3">최근 3개월</option>
-        <option value="month6">최근 6개월</option>
-        <option value="month12">최근 1년</option>
+          <option value="month1">최근 1개월</option>
+          <option value="month3">최근 3개월</option>
+          <option value="month6">최근 6개월</option>
+          <option value="month12">최근 1년</option>
       </Form.Select>
-      <Button variant="primary" type="submit">검색</Button>
+      <Button variant="primary" type="submit">🔍</Button>
     </Form>
   );
 };

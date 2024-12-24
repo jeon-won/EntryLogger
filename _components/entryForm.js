@@ -1,10 +1,10 @@
 'use client';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState, useEffect, useRef } from 'react';
-import { Container, Form, Button, Row, Col } from 'react-bootstrap';
-import { useRouter } from "next/navigation"
 import InfoModal from './infoModal';
 import insertDocument from '@/_util/insertDocument';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from "next/navigation"
 
 const EntryForm = () => {
   /* State, Ref 및 변수 */
@@ -17,8 +17,8 @@ const EntryForm = () => {
     // entryDateGmt9: '', // 입실일은 State 즉시 반영 이슈 때문에 별도 객체로 만들어 쓸 예정
   });
   const [isValidated, setIsValidated] = useState(false); // 폼 입력정보 유효성 검증용 State
-  const [isChecked, setIsChecked] = useState(false);     // 정보제공 동의 체크용 State
-  const focusRef = useRef(null); // 폼 입력 포커스용 Ref
+  const [isChecked, setIsChecked] = useState(false);     // 정보제공 동의 체크 확인용 State
+  const focusRef = useRef(null); // 폼 입력 칸에 포커스를 맞추기 위한 Ref
   const router = useRouter();    // Soft refresh용(바뀐 부분만 새로고침)
 
   /* 컴포넌트 렌더링 후 첫번째 입력 폼에 포커스 맞춤 */
@@ -79,23 +79,15 @@ const EntryForm = () => {
     // 입력값이 유효하면 폼 입력정보와 입실일을 DB에 저장하고
     e.preventDefault()
     insertDocument({ ...formData, entryDateGmt9: new Date(Date.now() + 9 * 60 * 60 * 1000)
-          .toISOString()
-          .replace('T', ' ')
-          .slice(0, 19)});
+      .toISOString().replace('T', ' ').slice(0, 19)}); // 나중에 편의를 위해 YYYY-MM-DD 형식을 추가 저장
 
     // State 초기화 한 후
+    setFormData({ purpose: '', name: '', dob: '', affiliation: '', contact: '' });
     setIsValidated(false);
     setIsChecked(false);
-    setFormData({
-      purpose: '',
-      name: '',
-      dob: '',
-      affiliation: '',
-      contact: '',
-    });
 
     // 입력 데이터 표출되게 새로고침 후 첫번째 입력 폼에 포커스 맞춤
-    router.refresh(); 
+    router.refresh();
     focusRef.current.focus();
   }
 

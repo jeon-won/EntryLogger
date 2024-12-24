@@ -1,6 +1,6 @@
 "use client";
+import { Table } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
 import Link from "next/link";
 
 const EntryListTable = ({ result }) => {
@@ -13,7 +13,7 @@ const EntryListTable = ({ result }) => {
 
   return (
     <>{
-      data ? (
+      data.length > 0 ? (
         <Table striped bordered hover>
           <thead>
             <tr className="centered">
@@ -39,8 +39,8 @@ const EntryListTable = ({ result }) => {
           }</tbody>
         </Table>
       ) : (
-        <div className="centered">
-          <p>검색 결과가 없습니다...</p>
+        <div className="text-center">
+          <p>해당 기간에 출입 내역이 없어요... 😑</p>
         </div>
       )
     }</>
